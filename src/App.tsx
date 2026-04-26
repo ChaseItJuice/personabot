@@ -6,9 +6,6 @@ declare global {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SpeechRecognitionInstance = any;
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Home, Search, Clock, Send, ArrowLeft, Mic, MicOff, MoreHorizontal, Lightbulb, Book, Smile, Trash2, Copy, ThumbsUp, ThumbsDown, Zap, LogOut, User, Lock, Mail, CheckCircle, XCircle, Database, Paperclip, X, FileText, History } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
@@ -25,7 +22,7 @@ interface SearchResult { id: number; personality: string; role: string; content:
 interface UploadedFile { id: number; filename: string; mimetype: string; size: number; created_at: string; }
 
 // ── CONFIG ─────────────────────────────────────────────────
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || "";
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || "YOUR_GROQ_API_KEY";
 const GROQ_MODEL   = "llama-3.3-70b-versatile";
 const GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions";
 
