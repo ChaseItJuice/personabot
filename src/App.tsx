@@ -108,10 +108,50 @@ const greetings: Record<PersonalityType, string> = {
 };
 
 const quickActions = [
-  { icon: Search,    label: 'Fun Fact',     prompt: 'Tell me a fascinating and surprising fun fact I probably don\'t know' },
-  { icon: Lightbulb, label: 'Daily Advice', prompt: 'Give me one powerful, actionable piece of advice I can apply today' },
-  { icon: Book,      label: 'Story Time',   prompt: 'Tell me a captivating short story with a surprising twist at the end' },
-  { icon: Smile,     label: 'Make me laugh',prompt: 'Tell me something genuinely funny — a joke, observation, or witty story' },
+  {
+    icon: Search,
+    label: 'Fun Fact',
+    prompts: {
+      friendly:     "Tell me a fascinating fun fact that will make me smile and feel amazed! 😊",
+      professional: "Share one counterintuitive business or science fact that challenges conventional wisdom.",
+      humorous:     "Tell me a fun fact so weird and surprising it sounds made up — but is totally true. Make it funny.",
+      wise:         "Share a profound and little-known fact about human nature, philosophy, or the universe.",
+      creative:     "Reveal a strange and magical fact about the world as if you're opening the first page of an epic adventure.",
+    },
+  },
+  {
+    icon: Lightbulb,
+    label: 'Daily Advice',
+    prompts: {
+      friendly:     "Give me one warm, encouraging piece of advice I can apply to my day right now 😊",
+      professional: "Give me one high-impact, evidence-based productivity or career tip I can act on immediately.",
+      humorous:     "Give me life advice that's actually useful — but deliver it like a comedian would. Funny first, wisdom second.",
+      wise:         "Share one piece of timeless wisdom that could shift my perspective on today's challenges.",
+      creative:     "Give me life advice as if you're a wise narrator guiding the hero of an epic story through a crucial turning point.",
+    },
+  },
+  {
+    icon: Book,
+    label: 'Story Time',
+    prompts: {
+      friendly:     "Tell me a heartwarming short story with a feel-good ending that leaves me smiling 😊",
+      professional: "Tell me a short, real-world business story about someone who turned failure into remarkable success.",
+      humorous:     "Tell me a hilariously absurd short story — the more ridiculous the better, but with a clever punchline at the end.",
+      wise:         "Tell me a short parable or fable with a profound lesson hidden in the narrative.",
+      creative:     "Tell me a vivid, imaginative short story where I am the hero — full of sensory detail and a surprising twist.",
+    },
+  },
+  {
+    icon: Smile,
+    label: 'Make me laugh',
+    prompts: {
+      friendly:     "Tell me something lighthearted and fun that will make me giggle! 😄",
+      professional: "Share a clever, witty observation about workplace culture or business that's genuinely funny.",
+      humorous:     "Hit me with your absolute best joke, pun, or comedic observation. No holding back — make it legendary.",
+      wise:         "Share a piece of wisdom delivered with gentle humor — something that makes me laugh and think at the same time.",
+      creative:     "Tell me something funny as if you're narrating the most absurd scene in the greatest comedy novel ever written.",
+    },
+  },
 ];
 
 const personalityNames: Record<PersonalityType, string> = {
@@ -733,7 +773,11 @@ export default function App() {
 
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {quickActions.map((a, i) => (
-                <button key={i} onClick={() => { if (!selectedPersonality) { toast.error('Pick a personality first!'); return; } handleSend(a.prompt); }}
+                <button key={i} onClick={() => {
+                  if (!selectedPersonality) { toast.error('Pick a personality first!'); return; }
+                  const prompt = a.prompts[selectedPersonality];
+                  handleSend(prompt);
+                }}
                   style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#1a1a1a', color: '#fff', border: 'none', borderRadius: 20, padding: '8px 16px', fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.2s' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = currentP?.color || '#333'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#1a1a1a'; (e.currentTarget as HTMLElement).style.transform = 'none'; }}>
