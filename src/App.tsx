@@ -1,5 +1,4 @@
 // ── GLOBALS ───────────────────────────────────────────────
-// Add these declarations at the very top of your file
 declare global {
   interface Window {
     SpeechRecognition: any;
@@ -7,12 +6,11 @@ declare global {
   }
 }
 
-// This defines the SpeechRecognition type so the useRef can use it
-type SpeechRecognition = any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SpeechRecognitionInstance = any;
 
-// Keep your existing imports below...
 import React, { useState, useRef, useEffect } from 'react';
-import { Home, Search, Plus, Clock, Send, ArrowLeft, Mic, MicOff, MoreHorizontal, Lightbulb, Book, Smile, Trash2, Copy, ThumbsUp, ThumbsDown, Zap, LogOut, User, Lock, Mail, CheckCircle, XCircle, Database, Paperclip, X, FileText, History } from 'lucide-react';
+import { Home, Search, Clock, Send, ArrowLeft, Mic, MicOff, MoreHorizontal, Lightbulb, Book, Smile, Trash2, Copy, ThumbsUp, ThumbsDown, Zap, LogOut, User, Lock, Mail, CheckCircle, XCircle, Database, Paperclip, X, FileText, History } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 
 // ── TYPES ─────────────────────────────────────────────────
@@ -411,7 +409,7 @@ export default function App() {
   const [isRecording, setIsRecording]         = useState(false);
   const fileInputRef                          = useRef<HTMLInputElement>(null);
   const messagesEndRef                        = useRef<HTMLDivElement>(null);
-  const recognitionRef                        = useRef<SpeechRecognition | null>(null);
+  const recognitionRef                        = useRef<any>(null);
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, isTyping]);
   useEffect(() => { if (!currentUser) return; checkDbHealth().then(ok => setDbStatus(ok ? 'ok' : 'error')); }, [currentUser]);
@@ -431,8 +429,9 @@ export default function App() {
     rec.continuous = false;
     rec.interimResults = false;
     rec.lang = 'en-US';
-    rec.onresult = (e: SpeechRecognitionEvent) => {
-      const transcript = e.results[0][0].transcript;
+    rec.onresult = (e: Event) => {
+      const speechEvent = e as unknown as { results: { [key: number]: { [key: number]: { transcript: string } } } };
+      const transcript = speechEvent.results[0][0].transcript;
       setInputText(prev => prev + transcript);
       setCharCount(prev => prev + transcript.length);
       toast.success('Voice captured!', { style: { background: '#10b981', color: '#fff', border: 'none', borderRadius: '10px' } });
